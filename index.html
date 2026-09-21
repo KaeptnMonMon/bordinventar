@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F1F3F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0D1413" media="(prefers-color-scheme: dark)">
+<title>Bordinventar</title>
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Bordinventar">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brandrow">
+      <h1 class="brand">Bordinventar <span id="stand"></span></h1>
+      <button type="button" class="iconbtn menubtn" data-menu aria-label="Menü">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="8" cy="3" r="1.6"/><circle cx="8" cy="8" r="1.6"/><circle cx="8" cy="13" r="1.6"/></svg>
+      </button>
+    </div>
+    <div class="searchwrap">
+      <svg class="mag" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+      <input id="q" type="search" placeholder="Wo ist … ? Impeller, Leuchtkugeln, Schäkel" autocomplete="off" autocapitalize="off" enterkeyhint="search" aria-label="Suche">
+      <button id="clearq" type="button" hidden aria-label="Suche löschen">×</button>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Ansicht">
+      <button class="tab" type="button" role="tab" aria-selected="true" data-tab="alles">Alles<span class="cnt num" id="cnt-alles"></span></button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-tab="stauraeume">Stauräume<span class="cnt num" id="cnt-stauraeume"></span></button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-tab="plan">Plan</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-tab="pruefen">Prüfen<span class="cnt num" id="cnt-pruefen"></span></button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div id="alert" class="notice" role="alert" hidden></div>
+  <div id="view"></div>
+</main>
+
+<button type="button" class="fab" data-new-item>
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>
+  Artikel
+</button>
+
+<input type="file" id="importfile" accept=".json,.html,application/json,text/html" hidden>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

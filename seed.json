@@ -1,0 +1,37 @@
+{
+  "locations": [
+    { "id": "loc_backskiste", "name": "Backskiste Backbord", "order": 10, "zone": "backskiste" },
+    { "id": "loc_vorschiff", "name": "Vorschiff unter dem Bett", "order": 20, "zone": "vkoje" },
+    { "id": "loc_sofa", "name": "Unter dem Steuerbordsofa", "order": 30, "zone": "sofa-stb" }
+  ],
+  "boxes": [
+    { "id": "box_backskiste_1", "locationId": "loc_backskiste", "number": 1, "label": "Motor & Ersatzteile", "shelf": "Regal oben" },
+    { "id": "box_backskiste_2", "locationId": "loc_backskiste", "number": 2, "label": "Elektrik", "shelf": "Regal oben" },
+    { "id": "box_backskiste_3", "locationId": "loc_backskiste", "number": 3, "label": "Werkzeug", "shelf": "Regal oben" },
+    { "id": "box_backskiste_4", "locationId": "loc_backskiste", "number": 4, "label": "Tauwerk & Schäkel", "shelf": "Regal oben" },
+    { "id": "box_backskiste_5", "locationId": "loc_backskiste", "number": 5, "label": "Sicherheit", "shelf": "Regal unten" },
+    { "id": "box_backskiste_6", "locationId": "loc_backskiste", "number": 6, "label": "Reinigung & Pflege", "shelf": "Regal unten" },
+    { "id": "box_backskiste_7", "locationId": "loc_backskiste", "number": 7, "label": "Segelreparatur", "shelf": "Regal unten" },
+    { "id": "box_backskiste_8", "locationId": "loc_backskiste", "number": 8, "label": "Noch frei", "shelf": "Regal unten" }
+  ],
+  "items": [
+    {
+      "id": "itm_beispiel_impeller", "name": "Impeller Volvo D1-30",
+      "locationId": "loc_backskiste", "boxId": "box_backskiste_1",
+      "quantity": 2, "unit": "Stk", "minQuantity": 1, "expiry": "", "category": "Motor",
+      "note": "Beispieleintrag – ersetzen oder löschen", "isExample": true
+    },
+    {
+      "id": "itm_beispiel_fackeln", "name": "Handfackeln rot",
+      "locationId": "loc_backskiste", "boxId": "box_backskiste_5",
+      "quantity": 6, "unit": "Stk", "minQuantity": 4, "expiry": "2027-06-30", "category": "Sicherheit",
+      "note": "Beispieleintrag – ersetzen oder löschen", "isExample": true
+    },
+    {
+      "id": "itm_beispiel_schaekel", "name": "Schäkel 8 mm",
+      "locationId": "loc_backskiste", "boxId": "box_backskiste_4",
+      "quantity": 4, "unit": "Stk", "minQuantity": 2, "expiry": "", "category": "Rigg & Segel",
+      "note": "Beispieleintrag – ersetzen oder löschen", "isExample": true
+    }
+  ]
+}
