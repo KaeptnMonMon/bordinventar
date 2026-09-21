@@ -25,6 +25,9 @@ export const ZONES = [
   { id: 'sofa-bb', subdivision: 'unterteilung', label: 'Salonsofa Backbord', lines: ['Sofa', 'Bb'], at: [113, 479], d: rect(86, 380, 52, 198) },
   { id: 'sofa-stb', subdivision: 'unterteilung', label: 'Salonsofa Steuerbord', lines: ['Sofa', 'Stb'], at: [278, 478], d: 'M252 380H304V619H216V577H252Z' },
   { id: 'salon-schapp-stb', subdivision: 'unterteilung', label: 'Salon Schapp Steuerbord', lines: ['Salon', 'Schapp', 'Stb'], at: [330, 499], d: rect(304, 380, 86, 239) },
+  // Zwei kleine Fächer im Salontisch (Tisch: x 188–248, y 412–577), mittig übereinander.
+  { id: 'tisch-oben', label: 'Tisch oben', lines: ['Tisch', 'oben'], at: [218, 458], d: rect(192, 428, 52, 60) },
+  { id: 'tisch-unten', label: 'Tisch unten', lines: ['Tisch', 'unten'], at: [218, 530], d: rect(192, 500, 52, 60) },
   { id: 'navi', label: 'Navigationsplatz', lines: ['Navi'], at: [100, 616], d: rect(62, 584, 76, 64) },
   { id: 'pantry', subdivision: 'unterteilung', label: 'Pantry', lines: ['Pantry'], at: [305, 661], d: 'M236 627H374V804H326V695H236Z' },
   { id: 'nasszelle', label: 'Nasszelle', lines: ['Nasszelle'], at: [81, 762], d: rect(28, 654, 106, 144) },

@@ -4,7 +4,7 @@
 // BEI JEDER ÄNDERUNG AN DER APP: CACHE hochzählen. Sonst bleibt am Handy still die alte
 // Fassung stehen. Jede App-Datei muss in FILES stehen; bereitstellen.sh prüft das.
 
-const CACHE = 'bordinventar-v17';
+const CACHE = 'bordinventar-v18';
 
 // Alle Adressen relativ, ohne führenden Schrägstrich: Die App liegt in einem Unterverzeichnis.
 const FILES = [
