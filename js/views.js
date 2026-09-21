@@ -1,6 +1,6 @@
 // Rendering der Reiter. Reine Funktionen: Kontext hinein, Markup heraus.
 //
-// ctx = { inventory, state, query, searching, items, counts }
+// ctx = { inventory, state, query, searching, searchLimit, items, counts }
 //   items:  die sichtbaren Artikel – bei aktiver Suche nur die Treffer
 //   counts: Artikelzahlen je Kiste/Stauraum für genau diese Artikel
 //   state.open: 'box:<id>' oder 'loose:<locationId>' – die gerade geöffnete Kiste
@@ -285,9 +285,13 @@ function renderSearch(ctx) {
     return emptyState('Nichts gefunden', `Kein Artikel enthält „${ctx.query}“. Andere Schreibweise oder ein Teilwort probieren.`);
   }
   const anyOnPlan = ctx.items.some((item) => item.zoneId);
+  // Bei sehr vielen Treffern zuerst nur die ersten zeigen, damit das Tippen flüssig bleibt.
+  const shown = ctx.items.slice(0, ctx.searchLimit);
+  const hidden = ctx.items.length - shown.length;
   return groupBlock('Treffer', `${ctx.items.length} von ${ctx.inventory.counts.items}`, html`
     ${anyOnPlan ? html`<button class="btn planchip" data-show-plan>Alle Treffer im Schiffsplan zeigen</button>` : ''}
-    ${itemList(ctx.items, { locate: true })}`);
+    ${itemList(shown, { locate: true })}
+    ${hidden > 0 ? html`<button class="btn morebtn" data-more-hits>Weitere ${hidden} Treffer anzeigen</button>` : ''}`);
 }
 
 function renderReview({ inventory }) {

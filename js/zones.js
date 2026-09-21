@@ -21,9 +21,9 @@ export const ZONES = [
   { id: 'vkoje', label: 'V-Koje (Vorschiff)', lines: ['V-Koje'], at: [200, 215], d: 'M178 100L222 100L300 300L100 300Z' },
   { id: 'schrank-bb', label: 'Schrank vorn Backbord', lines: ['Schrank', 'Bb'], at: [103, 339], d: rect(70, 306, 66, 66) },
   { id: 'schrank-stb', label: 'Schrank vorn Steuerbord', lines: ['Schrank', 'Stb'], at: [297, 339], d: rect(264, 306, 66, 66) },
-  { id: 'salon-schapp-bb', subdivision: 'unterteilung', label: 'Salon Schapp Backbord', lines: ['Salon', 'Schapp', 'Bb'], at: [70, 479], d: rect(10, 380, 86, 198) },
-  { id: 'sofa-bb', subdivision: 'unterteilung', label: 'Salonsofa Backbord', lines: ['Sofa', 'Bb'], at: [117, 479], d: rect(96, 380, 42, 198) },
-  { id: 'sofa-stb', subdivision: 'unterteilung', label: 'Salonsofa Steuerbord', lines: ['Sofa', 'Stb'], at: [283, 478], d: 'M262 380H304V619H216V577H262Z' },
+  { id: 'salon-schapp-bb', subdivision: 'unterteilung', label: 'Salon Schapp Backbord', lines: ['Salon', 'Schapp', 'Bb'], at: [64, 479], d: rect(10, 380, 76, 198) },
+  { id: 'sofa-bb', subdivision: 'unterteilung', label: 'Salonsofa Backbord', lines: ['Sofa', 'Bb'], at: [113, 479], d: rect(86, 380, 52, 198) },
+  { id: 'sofa-stb', subdivision: 'unterteilung', label: 'Salonsofa Steuerbord', lines: ['Sofa', 'Stb'], at: [278, 478], d: 'M252 380H304V619H216V577H252Z' },
   { id: 'salon-schapp-stb', subdivision: 'unterteilung', label: 'Salon Schapp Steuerbord', lines: ['Salon', 'Schapp', 'Stb'], at: [330, 499], d: rect(304, 380, 86, 239) },
   { id: 'navi', label: 'Navigationsplatz', lines: ['Navi'], at: [100, 616], d: rect(62, 584, 76, 64) },
   { id: 'pantry', subdivision: 'unterteilung', label: 'Pantry', lines: ['Pantry'], at: [305, 661], d: 'M236 627H374V804H326V695H236Z' },
@@ -45,7 +45,7 @@ export const ZONE_RANK = new Map(ZONES.map((zone, index) => [zone.id, index]));
 // Herd, Kissen, WC.
 export const DECOR = `<g class="decor">
 <path d="M66 376H178M222 376H334"/>
-<rect x="188" y="412" width="68" height="165" rx="8"/>
+<rect x="188" y="412" width="60" height="165" rx="8"/>
 <rect x="162" y="746" width="74" height="56" rx="4"/>
 <rect x="162" y="802" width="74" height="56" rx="4"/><text class="decor-label" x="199" y="830">Motor</text><path d="M162 765H236M162 784H236"/>
 <circle cx="350" cy="715" r="7"/><circle cx="350" cy="739" r="7"/>

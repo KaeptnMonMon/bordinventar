@@ -21,9 +21,11 @@ const PARENT_STATE = {
   zone: { zoneId: null, open: null, focusId: null },
 };
 const QUANTITY_WRITE_DELAY_MS = 500;
+const SEARCH_PAGE_SIZE = 100;
 
 let state = { ...ROOT_STATE };
 let query = '';
+let searchLimit = SEARCH_PAGE_SIZE;
 let data = { locations: [], boxes: [], items: [] }; // Rohdaten, so wie sie in IndexedDB stehen
 let inventory = null;                               // daraus abgeleitet, siehe model.js
 
@@ -105,6 +107,7 @@ function render() {
     state,
     query: query.trim(),
     searching: tokens.length > 0,
+    searchLimit,
     items,
     counts: countItems(items),
   };
@@ -228,6 +231,10 @@ const ACTIONS = {
   newBox: (locationId) => openBoxDialog({ locationId }),
   editLocation: (id) => openLocationDialog({ locationId: id }),
   menu: openMenu,
+  moreHits: () => {
+    searchLimit += 200;
+    render();
+  },
 };
 
 const toAttribute = (key) => `data-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`;
@@ -250,6 +257,7 @@ document.addEventListener('keydown', (event) => {
 
 searchInput.addEventListener('input', () => {
   query = searchInput.value;
+  searchLimit = SEARCH_PAGE_SIZE;
   render();
 });
 searchInput.addEventListener('keydown', (event) => {
@@ -257,6 +265,7 @@ searchInput.addEventListener('keydown', (event) => {
 });
 clearButton.addEventListener('click', () => {
   query = '';
+  searchLimit = SEARCH_PAGE_SIZE;
   searchInput.value = '';
   render();
   searchInput.focus();

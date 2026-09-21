@@ -51,6 +51,8 @@ body {
   font: 16px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
+  /* Kein Doppeltipp-Zoom und keine 300-ms-Verzögerung, auch auf den Bereichen im Plan. */
+  touch-action: manipulation;
 }
 
 h1, h2, h3 { font-family: var(--font-ui); letter-spacing: -.01em; }
@@ -165,6 +167,21 @@ button { cursor: pointer; }
 
 .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
 .tab .cnt { font-size: 11px; color: var(--muted); margin-left: 5px; }
+
+/* Querformat am Telefon: wenig Höhe, deshalb Titel und Suche nebeneinander. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .topbar-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas: "brand search" "tabs tabs";
+    column-gap: 12px;
+    align-items: center;
+  }
+
+  .brandrow { grid-area: brand; }
+  .searchwrap { grid-area: search; margin: 4px 0; }
+  .tabs { grid-area: tabs; }
+}
 
 main {
   padding-top: 16px;
@@ -353,6 +370,8 @@ main {
 
 .btn.ghost { background: none; }
 .backbtn { margin-bottom: 12px; }
+.morebtn { width: 100%; margin-top: 10px; color: var(--accent); border-color: var(--accent); }
+
 .planchip { margin-bottom: 10px; color: var(--accent); border-color: var(--accent); }
 
 .iconbtn {
