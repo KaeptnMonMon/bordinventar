@@ -103,10 +103,8 @@ export function openItemDialog({ itemId = null, preselect = null } = {}) {
       ${field('f-unit', 'Einheit', html`<input id="f-unit" name="unit" list="units" autocomplete="off" placeholder="Stk" value="${item ? item.unit : 'Stk'}">`)}
       ${field('f-min', 'Mindest', html`<input id="f-min" name="minQuantity" type="number" inputmode="decimal" step="any" min="0" placeholder="–" value="${item?.minQuantity ?? ''}">`)}
     </div>
-    <div class="fieldrow">
-      ${field('f-best', 'Haltbar bis', html`<span class="inputwrap"><input id="f-best" name="bestBefore" type="date" autocomplete="off" value="${item?.expiry ?? ''}"><button type="button" class="inputclear" data-clear-date aria-label="Datum entfernen" hidden>×</button></span>`)}
-      ${field('f-cat', 'Kategorie', html`<input id="f-cat" name="category" list="categories" autocomplete="off" placeholder="–" value="${item?.category ?? ''}">`)}
-    </div>
+    ${field('f-best', 'Haltbar bis', html`<span class="inputwrap"><input id="f-best" name="bestBefore" type="date" autocomplete="off" value="${item?.expiry ?? ''}"><button type="button" class="inputclear" data-clear-date aria-label="Datum entfernen" hidden>×</button></span>`)}
+    ${field('f-cat', 'Kategorie', html`<input id="f-cat" name="category" list="categories" autocomplete="off" placeholder="–" value="${item?.category ?? ''}">`)}
     ${field('f-note', 'Notiz', html`<textarea id="f-note" name="note" placeholder="Typ, Maße, Kaufdatum …">${item?.note ?? ''}</textarea>`)}
     ${datalist('units', suggestions(UNITS, data.items.map((entry) => entry.unit)))}
     ${datalist('categories', suggestions(CATEGORIES, data.items.map((entry) => entry.category)))}`;

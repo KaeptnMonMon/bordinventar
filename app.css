@@ -643,8 +643,21 @@ body.overlay-open { overflow: hidden; }
 }
 
 .field textarea { min-height: 72px; resize: vertical; }
-.inputwrap { position: relative; display: block; }
+/* Datumsfelder haben auf iOS eine eigene Mindestbreite und drängen sich sonst über den Nachbarn. Sie
+   stehen deshalb allein in ihrer Zeile und dürfen nie breiter werden als ihr Feld. */
+.inputwrap { position: relative; display: block; min-width: 0; max-width: 100%; }
 .inputwrap input { padding-right: 44px; }
+
+.field input[type="date"] {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  text-align: left;
+}
+
+.field input[type="date"]::-webkit-date-and-time-value { text-align: left; }
 
 .inputclear {
   position: absolute;
