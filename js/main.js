@@ -4,6 +4,7 @@ import { renderMain } from './views.js';
 import { closeAllOverlays, hasOverlay } from './overlay.js';
 import { deleteItem, initDialogs, openBoxDialog, openItemDialog, openLocationDialog } from './dialogs.js';
 import { initMenu, openMenu } from './menu.js';
+import { addQuickTask, buildTasks, clearDoneTasks, deleteTask, initTasks, openTaskDialog, toggleTaskDone } from './tasks.js';
 import { ZONES } from './zones.js';
 
 const $ = (id) => document.getElementById(id);
@@ -11,6 +12,11 @@ const view = $('view');
 const alertBox = $('alert');
 const searchInput = $('q');
 const clearButton = $('clearq');
+const searchWrap = document.querySelector('.searchwrap');
+const quickaddWrap = $('quickadd');
+const taskInput = $('taskinput');
+const taskAddButton = $('taskadd');
+const fabLabel = $('fab-label');
 const header = document.querySelector('.topbar');
 const tabButtons = [...document.querySelectorAll('[data-tab]')];
 
@@ -26,7 +32,8 @@ const SEARCH_PAGE_SIZE = 100;
 let state = { ...ROOT_STATE };
 let query = '';
 let searchLimit = SEARCH_PAGE_SIZE;
-let data = { locations: [], boxes: [], items: [] }; // Rohdaten, so wie sie in IndexedDB stehen
+let showDoneTasks = false;
+let data = { locations: [], boxes: [], items: [], tasks: [] }; // Rohdaten, so wie sie in IndexedDB stehen
 let inventory = null;                               // daraus abgeleitet, siehe model.js
 
 function showError(error) {
@@ -47,8 +54,8 @@ function rebuild() {
 }
 
 async function loadData() {
-  const [locations, boxes, items] = await Promise.all(store.STORE_NAMES.map(store.getAll));
-  data = { locations, boxes, items };
+  const [locations, boxes, items, tasks] = await Promise.all(store.STORE_NAMES.map(store.getAll));
+  data = { locations, boxes, items, tasks };
   rebuild();
 }
 
@@ -102,6 +109,7 @@ window.addEventListener('pagehide', () => flush().catch(showError));
 function render() {
   const tokens = searchTokens(query);
   const items = tokens.length ? filterItems(inventory.items, tokens) : inventory.items;
+  const tasks = buildTasks(data.tasks);
   const ctx = {
     inventory,
     state,
@@ -110,6 +118,8 @@ function render() {
     searchLimit,
     items,
     counts: countItems(items),
+    tasks,
+    showDone: showDoneTasks,
   };
   view.innerHTML = String(renderMain(ctx));
 
@@ -119,9 +129,16 @@ function render() {
   $('cnt-alles').textContent = inventory.counts.items || '';
   $('cnt-stauraeume').textContent = inventory.counts.locations || '';
   $('cnt-pruefen').textContent = inventory.counts.attention || '';
+  $('cnt-aufgaben').textContent = tasks.open.length || '';
   $('stand').textContent = inventory.savedAt ? `· Stand ${formatTimestamp(inventory.savedAt)}` : '';
   clearButton.hidden = query === '';
   document.body.classList.toggle('has-sheet', view.querySelector('.sheet') !== null);
+
+  // Auf dem Reiter „Aufgaben“ ersetzt die Schnelleingabe die Inventarsuche, am selben Platz.
+  const onTasks = state.tab === 'aufgaben';
+  searchWrap.hidden = onTasks;
+  quickaddWrap.hidden = !onTasks;
+  fabLabel.textContent = onTasks ? 'Aufgabe' : 'Artikel';
 
   view.querySelector('.sheet .is-focus')?.scrollIntoView({ block: 'nearest' });
 }
@@ -235,6 +252,16 @@ const ACTIONS = {
     searchLimit += 200;
     render();
   },
+  // Der schwebende Knopf legt je nach Reiter einen Artikel oder eine Aufgabe an.
+  fab: () => (state.tab === 'aufgaben' ? openTaskDialog() : openItemDialog({ preselect: currentPlace() })),
+  toggleTask: toggleTaskDone,
+  editTask: (id) => openTaskDialog({ taskId: id }),
+  deleteTask,
+  toggleDone: () => {
+    showDoneTasks = !showDoneTasks;
+    render();
+  },
+  clearDone: () => clearDoneTasks().catch(showError),
 };
 
 const toAttribute = (key) => `data-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`;
@@ -271,10 +298,35 @@ clearButton.addEventListener('click', () => {
   searchInput.focus();
 });
 
+// Schnelleingabe für Aufgaben: Feld leert sich sofort und behält den Fokus, damit sich mehrere
+// Aufgaben hintereinander diktieren lassen, ohne die Tastatur zwischendurch zu schließen. Das Feld
+// liegt in der Kopfzeile außerhalb von #view, überlebt also ein render() unangetastet.
+function submitQuickTask() {
+  const title = taskInput.value.trim();
+  if (!title) return;
+  taskInput.value = '';
+  addQuickTask(title).catch(showError);
+}
+taskInput.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    submitQuickTask();
+  }
+});
+taskAddButton.addEventListener('click', submitQuickTask);
+
 // Die klebende Kopfleiste ist unterschiedlich hoch; das Bereichsfenster am Desktop klebt darunter.
 new ResizeObserver(() => {
   document.documentElement.style.setProperty('--header-h', `${header.offsetHeight}px`);
 }).observe(header);
+
+// Adresse mit ?aufgabe=… öffnet direkt den Reiter „Aufgaben“ und füllt die Schnelleingabe vor,
+// ohne sie abzuschicken – zum Übergeben aus einer Kurzbefehl-Aktion (Teilen-Menü) heraus, z. B. mit
+// Text aus einem Chat. Ein Tipp auf „+“ oder Return legt die Aufgabe dann wie gewohnt an.
+function readTaskHandoff() {
+  const text = new URL(location.href).searchParams.get('aufgabe');
+  return text?.trim() || null;
+}
 
 async function start() {
   await store.initStore();
@@ -283,8 +335,19 @@ async function start() {
   const hooks = { getData: () => data, getInventory: () => inventory, flush, refresh };
   initDialogs(hooks);
   initMenu(hooks);
+  initTasks(hooks);
+
+  const handoff = readTaskHandoff();
+  if (handoff) state = { ...ROOT_STATE, tab: 'aufgaben' };
   initHistory();
   render();
+
+  if (handoff) {
+    taskInput.value = handoff;
+    taskInput.focus();
+    // Die Adresse bereinigen, damit ein Neuladen oder ein Lesezeichen die Aufgabe nicht wiederholt.
+    history.replaceState(history.state, '', location.pathname + location.hash);
+  }
 }
 
 // Erst nach dem Laden, damit das Zwischenspeichern der App nicht mit dem Start konkurriert.

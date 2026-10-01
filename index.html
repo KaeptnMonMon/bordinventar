@@ -30,11 +30,16 @@
       <input id="q" type="search" placeholder="Wo ist … ? Impeller, Leuchtkugeln, Schäkel" autocomplete="off" autocapitalize="off" enterkeyhint="search" aria-label="Suche">
       <button id="clearq" type="button" hidden aria-label="Suche löschen">×</button>
     </div>
+    <div class="quickaddwrap" id="quickadd" hidden>
+      <input id="taskinput" type="text" placeholder="Neue Aufgabe … antippen und diktieren" autocomplete="off" enterkeyhint="done" aria-label="Neue Aufgabe">
+      <button type="button" id="taskadd" aria-label="Aufgabe hinzufügen">+</button>
+    </div>
     <nav class="tabs" role="tablist" aria-label="Ansicht">
       <button class="tab" type="button" role="tab" aria-selected="true" data-tab="alles">Alles<span class="cnt num" id="cnt-alles"></span></button>
       <button class="tab" type="button" role="tab" aria-selected="false" data-tab="stauraeume">Stauräume<span class="cnt num" id="cnt-stauraeume"></span></button>
       <button class="tab" type="button" role="tab" aria-selected="false" data-tab="plan">Plan</button>
       <button class="tab" type="button" role="tab" aria-selected="false" data-tab="pruefen">Prüfen<span class="cnt num" id="cnt-pruefen"></span></button>
+      <button class="tab" type="button" role="tab" aria-selected="false" data-tab="aufgaben">Aufgaben<span class="cnt num" id="cnt-aufgaben"></span></button>
     </nav>
   </div>
 </header>
@@ -44,9 +49,9 @@
   <div id="view"></div>
 </main>
 
-<button type="button" class="fab" data-new-item>
+<button type="button" class="fab" data-fab>
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>
-  Artikel
+  <span id="fab-label">Artikel</span>
 </button>
 
 <input type="file" id="importfile" accept=".json,.html,application/json,text/html" hidden>

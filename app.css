@@ -358,6 +358,70 @@ main {
 .empty { text-align: center; color: var(--muted); padding: 40px 16px; font-size: 14.5px; }
 .empty strong { display: block; color: var(--ink); font-size: 16px; margin-bottom: 4px; }
 
+/* ---------- Aufgaben ---------- */
+
+/* Ersetzt die Suche in der Kopfzeile, am selben Platz, wenn der Reiter „Aufgaben“ aktiv ist. */
+.quickaddwrap { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+
+.quickaddwrap input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 11px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  font-size: 16px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.quickaddwrap input::placeholder { color: var(--muted); }
+
+.quickaddwrap button {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 22px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+}
+
+.row.taskrow { flex-direction: row; align-items: center; padding: 6px 12px; gap: 10px; }
+
+.taskcheck {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 2px solid var(--line);
+  background: var(--surface);
+  color: var(--accent-ink);
+  display: grid;
+  place-items: center;
+}
+
+.taskrow.is-done .taskcheck { background: var(--accent); border-color: var(--accent); }
+
+.taskmain {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 0;
+  border: none;
+  background: none;
+  text-align: left;
+  display: block;
+}
+
+.taskrow.is-done .rowname { text-decoration: line-through; color: var(--muted); }
+
+.tasknote { display: block; overflow-wrap: anywhere; }
+
 .btn {
   min-height: 44px;
   border: 1px solid var(--line);

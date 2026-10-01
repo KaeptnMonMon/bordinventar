@@ -9,12 +9,14 @@ import { html, raw } from './html.js';
 import { ZONES, ZONE_BY_ID } from './zones.js';
 import { renderPlanSvg } from './plan.js';
 import { formatQuantity, reviewGroups, showsContentsDirectly } from './model.js';
+import { renderTasksTab } from './tasks.js';
 
 const TRASH_ICON = raw('<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h12M7 5V3.5h4V5M5 5l.6 9.5h6.8L13 5M7.6 8v4.2M10.4 8v4.2"/></svg>');
 const PIN_ICON = raw('<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 16s5-4.6 5-8.5a5 5 0 0 0-10 0C4 11.4 9 16 9 16Z"/><circle cx="9" cy="7.5" r="1.8"/></svg>');
 
 export function renderMain(ctx) {
   const { tab } = ctx.state;
+  if (tab === 'aufgaben') return renderTasksTab(ctx);
   if (tab === 'plan') return renderPlan(ctx);
   if (ctx.searching) return renderSearch(ctx);
   if (tab === 'stauraeume') return renderLocations(ctx);

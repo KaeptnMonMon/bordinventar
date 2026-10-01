@@ -15,10 +15,52 @@ Dass dieses Repository öffentlich ist, ist unkritisch: Hier liegt nur der Progr
 - **Stauräume:** Jeder Stauraum als Karte, mit seinen Kisten oder Unterteilungen.
 - **Plan:** Das Schiff von oben. Tippe einen Bereich an, um zu sehen, was dort liegt. Suchst du etwas, leuchtet der Bereich auf, in dem es liegt.
 - **Prüfen:** Was abgelaufen ist, was in den nächsten sechs Monaten abläuft und was nachgekauft werden muss.
+- **Aufgaben:** Reparaturen, Projekte und Termine, unabhängig vom Inventar. Siehe unten.
 - **Menge ändern:** Mit den Knöpfen − und + in der Zeile, ohne Dialog.
 - **Artikel anlegen, ändern, löschen:** Mit dem Knopf „+ Artikel“ unten rechts, mit einem Tipp auf den Namen oder mit dem Mülleimer am Zeilenende. Vor dem Löschen fragt die App nach.
 
 Es gibt keinen Speichern-Knopf. Jede Änderung wird sofort im Gerät gesichert.
+
+### Aufgaben
+
+Im Reiter „Aufgaben“ steht oben statt der Suche ein Eingabefeld: antippen, den Text eintippen oder diktieren, dann Return oder „+“. Die Aufgabe ist sofort angelegt, und das Feld bleibt leer und fokussiert stehen, du kannst gleich die nächste diktieren.
+
+Kleinigkeiten wie „Umlenkrolle Fockschot reparieren“ reichen als ein Satz. Für größere Vorhaben oder Termine tippst du die Aufgabe danach an und trägst ein **Fälligkeitsdatum** und eine **Notiz** nach, zum Beispiel beim Kleben des Steuerbord-Fensters oder bei der jährlichen Unterwasserwartung. Fällige Aufgaben werden wie das Ablaufdatum bei Artikeln eingefärbt: überfällig rot, bald fällig gelb.
+
+Ein Tipp auf den Kreis vor der Aufgabe hakt sie ab. Sie verschwindet dann aus der Liste und landet in einem eingeklappten Block „Erledigt“, den du bei Bedarf aufklappst. Gelöscht wird dabei nichts; endgültig entfernst du erledigte Aufgaben über „Erledigte löschen“ in diesem Block.
+
+Aufgaben gleichen sich zwischen iPhone und Mac genauso ab wie das Inventar, über Sicherung und Import (siehe unten).
+
+Für wiederkehrende Termine gibt es noch keine Automatik. Nach dem Abhaken legst du die nächste Fälligkeit bei Bedarf als neue Aufgabe an.
+
+### Eine Aufgabe aus einem Chat oder einer anderen App übergeben
+
+Ein Chat wie Claude.ai hat keinen Zugriff auf diese App – Browser trennen die Daten jeder Adresse streng, und Bordinventar hat bewusst keinen Server, der das überbrücken könnte. Zwei Wege funktionieren trotzdem, beide ohne dass Daten irgendwo zwischengespeichert würden:
+
+**Direkt mit der Adresse.** Hängst du `?aufgabe=DeinText` an die Adresse der App, öffnet sie direkt den Reiter „Aufgaben“ mit diesem Text im Eingabefeld, fertig zum Abschicken mit Return. Ein Beispiel:
+
+```
+https://kaeptnmonmon.github.io/bordinventar/?aufgabe=Fenster%20Steuerbord%20Pflicht%20kleben
+```
+
+Leerzeichen werden als `%20` geschrieben, Umlaute und Sonderzeichen entsprechend. Nichts wird automatisch angelegt – du siehst den Text erst im Feld und bestätigst ihn selbst.
+
+Das lässt sich mit der App **Kurzbefehle** am iPhone zu einer Teilen-Aktion machen: Neuer Kurzbefehl, Aktion „URL öffnen“ mit der Adresse oben und der Kurzbefehl-Eingabe statt `DeinText` eingesetzt, dazu „Übergabe vom Teilen-Menü akzeptieren“ (Text) einschalten. Danach kannst du in Safari, in Notizen oder im Claude-Chat Text markieren, auf „Teilen“ tippen und den Kurzbefehl wählen – er öffnet Bordinventar mit dem Text im Aufgabenfeld.
+
+**Als Datei.** Bitte den Chat, dir die Aufgabe als Datei in genau diesem Aufbau auszugeben, speichere die Datei und lies sie über „Sicherung einlesen“ ein:
+
+```json
+{
+  "format": "bordinventar",
+  "version": 1,
+  "exportedAt": "2026-10-01T12:00:00.000Z",
+  "tasks": [
+    { "id": "tsk_fenster01", "title": "Fenster Steuerbord Pflicht kleben", "dueDate": "", "note": "", "done": false, "completedAt": null, "updatedAt": "2026-10-01T12:00:00.000Z" }
+  ]
+}
+```
+
+Dieser Weg eignet sich für mehrere Aufgaben auf einmal; der erste Weg ist für eine einzelne Aufgabe schneller.
 
 ### Kisten, Unterteilungen und Stauräume
 
@@ -43,7 +85,7 @@ Die App muss einmal mit Internet geöffnet werden. Danach läuft sie auch im Flu
 1. Öffne die Adresse in Safari.
 2. Wähle im Menü **Ablage**, dann **Zum Dock hinzufügen**.
 
-**Wichtig:** Die installierte App und Safari haben getrennte Daten, ebenso das iPhone und der Mac. Trage deshalb nichts in Safari ein, bevor du die App installiert hast. Was du dort eintippst, taucht in der installierten App nicht auf.
+**Zu Safari und der installierten App:** Beide greifen auf dieselbe Adresse zu, und Browser speichern Daten pro Adresse – nach allem, was ich weiß, teilen sie sich deshalb denselben Datenbestand. Sicher bin ich mir nicht, weil ich das nicht an einem echten iPhone nachprüfen kann. Einmal selbst testen, bevor du dich darauf verlässt: In der installierten App einen Testeintrag anlegen, dann dieselbe Adresse in Safari öffnen und nachsehen, ob er dort erscheint. IPhone und Mac haben in jedem Fall getrennte Daten, weil es zwei verschiedene Geräte sind – dafür gibt es den Abgleich (siehe unten).
 
 ## Sichern
 
@@ -102,7 +144,7 @@ Den **Inhalt** von `Upload` ziehst du auf GitHub unter **Add file**, dann **Uplo
 
 ### Bei jeder Änderung
 
-Erhöhe in `sw.js` die Cache-Version, zum Beispiel von `bordinventar-v18` auf `bordinventar-v19`. Ohne diesen Schritt bleibt auf dem iPhone still die alte Fassung stehen, ohne Fehlermeldung. Danach `./bereitstellen.sh` ausführen und den Inhalt von `Upload` hochladen.
+Erhöhe in `sw.js` die Cache-Version, zum Beispiel von `bordinventar-v19` auf `bordinventar-v20`. Ohne diesen Schritt bleibt auf dem iPhone still die alte Fassung stehen, ohne Fehlermeldung. Danach `./bereitstellen.sh` ausführen und den Inhalt von `Upload` hochladen.
 
 Hinzufügen einer neuen Datei: Trage sie in die Liste in `sw.js` ein, sonst stoppt `bereitstellen.sh` mit einer Meldung.
 
@@ -130,5 +172,6 @@ Dann `http://localhost:8080/bordinventar/` in Safari öffnen. Auf `localhost` fu
 | `js/views.js`, `js/plan.js`, `js/zones.js` | Reiter, Schiffsplan und seine Bereiche |
 | `js/dialogs.js`, `js/overlay.js`, `js/menu.js` | Dialoge, Rückfragen und Menü |
 | `js/exchange.js`, `js/backup-page.js` | Sicherung, Import und die HTML-Sicherung |
+| `js/tasks.js` | Reiter „Aufgaben“: Ableitung, Ansicht, Dialog, Schnelleingabe |
 
 Die Bereiche des Schiffsplans und ihre Zeichnung stehen in `js/zones.js`. Dort steht auch, welcher Bereich sich in Kisten oder Unterteilungen gliedert. Alle Einzelheiten beschreibt die Spezifikation `BORDINVENTAR-SPEC.md` im Projektordner.

@@ -11,10 +11,12 @@ const NOT_A_BACKUP = 'Die Datei ist keine Bordinventar-Sicherung.';
 
 const collator = new Intl.Collator('de', { numeric: true, sensitivity: 'base' });
 
+// Nach Namen statt nach Position destrukturiert: wächst STORE_NAMES um einen weiteren Speicher
+// (wie zuletzt um „tasks“), bleibt diese Funktion ohne Änderung richtig.
 export async function collectData() {
   const names = [...store.STORE_NAMES, store.DELETIONS];
-  const [locations, boxes, items, deletions] = await Promise.all(names.map(store.getAll));
-  return { locations, boxes, items, deletions };
+  const values = await Promise.all(names.map(store.getAll));
+  return Object.fromEntries(names.map((name, index) => [name, values[index]]));
 }
 
 /* ---------- CSV ---------- */

@@ -1,14 +1,14 @@
 // IndexedDB-Zugriff, Schema und Migrationen. Kennt keine Oberfläche.
 
 const DATABASE_NAME = 'bordinventar';
-const DATABASE_VERSION = 2;
+const DATABASE_VERSION = 3;
 
-export const STORE_NAMES = ['locations', 'boxes', 'items'];
+export const STORE_NAMES = ['locations', 'boxes', 'items', 'tasks'];
 // Löschvermerke: { id, store, deletedAt }. Ohne sie käme ein gelöschter Datensatz beim nächsten
 // Import von einem anderen Gerät zurück.
 export const DELETIONS = 'deletions';
 
-const ID_PREFIXES = { locations: 'loc', boxes: 'box', items: 'itm' };
+const ID_PREFIXES = { locations: 'loc', boxes: 'box', items: 'itm', tasks: 'tsk' };
 
 // Pflichtfelder müssen nach trim() nicht leer sein. Defaults füllen fehlende Felder,
 // damit jeder gespeicherte Datensatz vollständig ist.
@@ -28,21 +28,30 @@ const SCHEMA = {
       expiry: '', category: '', note: '', isExample: false,
     },
   },
+  tasks: {
+    required: ['title'],
+    defaults: { note: '', dueDate: '', done: false, completedAt: null },
+  },
 };
 
-// Jede Migration bringt die Datenbank von Version n-1 auf n. Bestehende
-// Migrationen nie ändern, nur neue Versionen anhängen.
+// Jede Migration bringt die Datenbank von Version n-1 auf n. Bestehende Migrationen nie ändern,
+// nur neue Versionen anhängen. Jede Migration listet ihre Objektspeicher fest auf, statt sich auf
+// STORE_NAMES zu verlassen – sonst würde eine spätere Erweiterung von STORE_NAMES die Vergangenheit
+// umschreiben und ein frischer Start legte denselben Speicher zweimal an.
 const MIGRATIONS = {
   1(database) {
-    for (const name of STORE_NAMES) database.createObjectStore(name, { keyPath: 'id' });
+    for (const name of ['locations', 'boxes', 'items']) database.createObjectStore(name, { keyPath: 'id' });
   },
   2(database) {
     database.createObjectStore(DELETIONS, { keyPath: 'id' });
   },
+  3(database) {
+    database.createObjectStore('tasks', { keyPath: 'id' });
+  },
 };
 
 // Felder, die neben ihrem Standardwert auch null oder einen anderen Typ tragen dürfen.
-const NULLABLE = { boxId: 'string', number: 'number', minQuantity: 'number' };
+const NULLABLE = { boxId: 'string', number: 'number', minQuantity: 'number', completedAt: 'string' };
 
 export class StoreError extends Error {
   constructor(message, cause) {
